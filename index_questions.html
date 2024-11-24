@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUESTION?!</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Staatliches&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Staatliches', sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%23000000'/%3E%3Cpath d='M10 10h5v5h-5zM20 20h5v5h-5z' fill='%23222222'/%3E%3C/svg%3E");
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            padding: 40px;
+            background: #111;
+            border: 3px solid #ff0066;
+            box-shadow: 8px 8px 0 #ff0066;
+            transform: rotate(-1deg);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4.5em;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 
+                -1px -1px 0 #ff0066,
+                1px -1px 0 #ff0066,
+                -1px 1px 0 #ff0066,
+                1px 1px 0 #ff0066;
+            transform: rotate(-2deg);
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        #question {
+            font-family: 'Staatliches', sans-serif;
+            font-size: 2rem;
+            line-height: 1.6;
+            margin: 30px 0;
+            padding: 20px;
+            background: #222;
+            color: #fff;
+            border-left: 5px solid #ff0066;
+            transform: rotate(1deg);
+            position: relative;
+            text-shadow: 2px 2px 0 #000; /* New shadow */
+            text-transform: uppercase;
+        }
+
+        #question::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 10px,
+                rgba(0, 0, 0, 0) 10px,
+                rgba(0, 0, 0, 0) 20px
+            );
+        }
+
+        .refresh-btn {
+            background: #ff0066;
+            border: none;
+            color: #fff;
+            padding: 15px 30px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            transform: rotate(-1deg);
+            position: relative;
+            outline: none;
+            letter-spacing: 2px;
+        }
+
+        .refresh-btn:hover {
+            transform: rotate(1deg) scale(1.05);
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .refresh-btn:active {
+            transform: translate(2px, 2px);
+        }
+
+        .brand {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5em;
+            color: #ff0066;
+            transform: rotate(-5deg);
+            text-shadow: 2px 2px 0 #000;
+            letter-spacing: 2px;
+        }
+
+        .social-links {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(-2deg);
+        }
+
+        .social-links a {
+            color: #ff0066;
+            margin-left: 20px;
+            font-size: 2em;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .social-links a:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        @keyframes shake {
+            0% { transform: rotate(-1deg); }
+            50% { transform: rotate(1deg); }
+            100% { transform: rotate(-1deg); }
+        }
+
+        .container:hover {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .sticker {
+            position: absolute;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5em;
+            color: #fff;
+            background: #ff0066;
+            padding: 10px;
+            transform: rotate(15deg);
+            box-shadow: 3px 3px 0 #000;
+            letter-spacing: 1px;
+        }
+
+        .sticker-1 {
+            top: -10px;
+            right: 30px;
+        }
+
+        .sticker-2 {
+            bottom: -10px;
+            left: 30px;
+            transform: rotate(-10deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="brand">ASK ME!</div>
+    <div class="container">
+        <div class="sticker sticker-1">WHATEVER!</div>
+        <h1>Random Question</h1>
+        <p id="question"></p>
+        <button class="refresh-btn" onclick="refreshQuestion()">
+            Next Question!
+        </button>
+        <div class="sticker sticker-2">WHO CARES?!</div>
+    </div>
+    <div class="social-links">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+    </div>
+
+    <script>
+        function getRandomQuestion() {
+            const questions = [
+                "IF A DOOR IS CLOSED, IS IT ON OR OFF?",
+                "TASTEBUDS ON YOUR PALMS OR BOTTOMS OF YOUR FEET?",
+                "IF YOU COULD BE SAVED BY SOMEONE ELSE WHAT WOULD THEIR SUPER POWER BE AND WHAT WOULD THEY BE SAVING YOU FROM?",
+                "IF YOU COULD ONLY SPEAK IN MOVIE QUOTES FOR A DAY, WHICH MOVIE WOULD YOU PICK TO QUOTE FROM AND WHY?",
+                "WOULD YOU RATHER ALWAYS HAVE TO SPEAK IN RIDDLES OR ONLY BE ABLE TO ANSWER QUESTIONS WITH ANOTHER QUESTION?",
+                "IF ANIMALS COULD TALK, WHICH ONE DO YOU THINK WOULD BE THE RUDEST AND WHY?",
+                "IF YOU WERE A SUPERHERO, BUT YOUR ONLY POWER WAS SOMETHING COMPLETELY USELESS, WHAT WOULD IT BE?",
+                "IF YOUR LIFE WAS A VIDEO GAME, WHAT WOULD BE THE ULTIMATE BOSS LEVEL CHALLENGE?",
+                "IF YOU COULD SWAP LIVES WITH ANY HISTORICAL FIGURE FOR A DAY, WHO WOULD IT BE, AND WHAT WOULD YOU DO DURING THAT DAY?",
+                "WHAT SOCIAL CONTRACT, IF BROKEN, WOULD DESTROY SOCIETY AS WE KNOW IT?",
+                "IF YOU COULD TAKE CREDIT FOR ONE INVENTION, PAST OR PRESENT, WHAT WOULD IT BE?",
+                "IF YOUR LIFE HAD A SIGNATURE SCENT, WHAT WOULD IT SMELL LIKE?",
+                "IF YOU COULD BRING ONE CUSTOM OVER FROM ANOTHER CULTURE TO THE ONE YOU ARE CURRENTLY IN, WHAT WOULD IT BE?"
+            ];
+            return questions[Math.floor(Math.random() * questions.length)];
+        }
+
+        function refreshQuestion() {
+            const questionElement = document.getElementById("question");
+            questionElement.style.opacity = "0";
+            
+            setTimeout(() => {
+                questionElement.innerText = getRandomQuestion();
+                questionElement.style.opacity = "1";
+            }, 200);
+        }
+
+        window.onload = function() {
+            document.getElementById("question").innerText = getRandomQuestion();
+        };
+    </script>
+</body>
+</html>
+
