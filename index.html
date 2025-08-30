@@ -237,6 +237,64 @@
             transform: translate(3px, 3px);
             box-shadow: 2px 2px 0 #000;
         }
+
+        /* Mobile responsive design */
+        @media (max-width: 768px) {
+            .logo-container {
+                position: relative;
+                top: auto;
+                right: auto;
+                transform: none;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .page-logo {
+                height: 60px;
+            }
+
+            .store-btn {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                display: block;
+                margin: 20px auto;
+                text-align: center;
+                max-width: 280px;
+            }
+
+            .store-btn:hover {
+                transform: scale(1.05);
+            }
+
+            .brand {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .social-links {
+                position: relative;
+                bottom: auto;
+                right: auto;
+                transform: none;
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .container {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            body {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>
