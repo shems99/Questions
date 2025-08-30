@@ -38,7 +38,8 @@
       text-transform:uppercase;
     }
     nav{display:flex;align-items:center;gap:18px}
-    nav a{color:var(--ink);text-decoration:none;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+    nav a{color:var(--ink);text-decoration:none;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;transition:color 0.2s ease}
+    nav a:hover{color:var(--pink)}
     .cta{background:var(--pink);color:#fff;border:none;padding:10px 16px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;cursor:pointer;box-shadow:4px 4px 0 #000;transform:rotate(-1.5deg)}
     .cta:hover{transform:rotate(.5deg) scale(1.03)}
 
@@ -54,20 +55,69 @@
     .p-name{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:1px}
     .price{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green)}
     .swatches, .sizes{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
-    .swatch{width:28px;height:28px;border:2px solid #fff;outline:2px solid #000}
+    .swatch{width:28px;height:28px;border:2px solid #fff;outline:2px solid #000;cursor:pointer;transition:transform 0.2s ease}
+    .swatch:hover{transform:scale(1.1)}
     .swatch.black{background:#111}
     .swatch.white{background:#eee}
-    .size{padding:6px 10px;border:2px solid #fff;background:#000;color:#fff;cursor:not-allowed;opacity:.6}
+    .size{padding:6px 10px;border:2px solid #fff;background:#000;color:#fff;cursor:not-allowed;opacity:.6;min-height:32px;transition:all 0.2s ease}
     .note{font-size:13px;opacity:.7;margin-top:6px}
 
     .buy{display:flex;gap:10px;margin-top:16px}
-    .btn{padding:12px 16px;border:0;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+    .btn{padding:12px 16px;border:0;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;transition:all 0.2s ease;min-height:44px}
     .btn.primary{background:var(--pink);color:#fff;transform:rotate(-1deg)}
+    .btn.primary:hover:not([disabled]){transform:rotate(0deg) scale(1.02)}
     .btn.primary[disabled]{filter:grayscale(1);cursor:not-allowed}
     .btn.ghost{background:transparent;color:#fff;border:2px solid #fff}
+    .btn.ghost:hover{background:#fff;color:#000}
 
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-    @media (max-width:920px){.grid-2{grid-template-columns:1fr}.h-title{font-size:48px}.hero-logo{height:100px}}
+    
+    /* Mobile responsive design */
+    @media (max-width:920px){
+      .grid-2{grid-template-columns:1fr}
+      .h-title{font-size:48px}
+      .hero-logo{height:100px}
+    }
+    
+    @media (max-width:768px){
+      .wrap{padding:12px 16px}
+      .wordmark{font-size:48px;letter-spacing:6px}
+      .logo-img{height:48px}
+      .h-title{font-size:36px}
+      .hero-logo{height:80px}
+      .h-sub{font-size:16px}
+      .p-name{font-size:32px}
+      .price{font-size:28px}
+      .hero{padding:30px 16px}
+      .card{padding:16px}
+      .btn{padding:10px 14px;font-size:14px}
+      .swatches,.sizes{gap:8px}
+      .swatch{width:24px;height:24px}
+      .size{padding:5px 8px;font-size:14px}
+      nav{gap:12px}
+      nav a{font-size:14px}
+      .cta{font-size:16px;padding:8px 12px}
+    }
+    
+    @media (max-width:480px){
+      .wordmark{font-size:36px;letter-spacing:4px}
+      .logo-img{height:40px}
+      .h-title{font-size:28px}
+      .hero-logo{height:60px}
+      .h-sub{font-size:14px}
+      .p-name{font-size:28px}
+      .price{font-size:24px}
+      .hero{padding:20px 12px}
+      .card{padding:12px}
+      .btn{padding:8px 12px;font-size:13px}
+      .swatch{width:20px;height:20px}
+      .size{padding:4px 6px;font-size:12px}
+      nav{gap:8px}
+      nav a{font-size:12px}
+      .cta{font-size:14px;padding:6px 10px}
+      .wrap{padding:8px 12px}
+      footer .wrap{flex-direction:column;text-align:center;gap:8px}
+    }
 
     .list{margin-top:12px}
     .list li{margin-left:18px;margin-bottom:6px}
