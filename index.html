@@ -185,10 +185,65 @@
             left: 30px;
             transform: rotate(-10deg);
         }
+
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            transform: rotate(2deg);
+            z-index: 10;
+        }
+
+        .page-logo {
+            height: 80px;
+            filter: drop-shadow(3px 3px 0 #000);
+            transition: transform 0.2s ease;
+        }
+
+        .page-logo:hover {
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        .store-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: #3df106e5;
+            border: 3px solid #fff;
+            color: #000000;
+            padding: 15px 25px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            transform: rotate(-3deg);
+            box-shadow: 5px 5px 0 #000;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .store-btn:hover {
+            transform: rotate(2deg) scale(1.1);
+            box-shadow: 8px 8px 0 #000;
+            background: #000;
+            border-color: #ff0066;
+            color: #ff0066;
+        }
+
+        .store-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0 #000;
+        }
     </style>
 </head>
 <body>
     <div class="brand">ASK ME!</div>
+    <div class="logo-container">
+      <img src="Qulture-Logo_Full-Color.png" alt="QULTURE Logo" class="page-logo">
+    </div>
     <div class="container">
         <div class="sticker sticker-1">WHATEVER!</div>
         <h1>Random Question</h1>
@@ -198,6 +253,7 @@
         </button>
         <div class="sticker sticker-2">WHO CARES?!</div>
     </div>
+    <a href="storefront.html" class="store-btn">GET THE HOODIE!</a>
     <div class="social-links">
         <a href="#"><i class="fab fa-instagram"></i></a>
         <a href="#"><i class="fab fa-tiktok"></i></a>
