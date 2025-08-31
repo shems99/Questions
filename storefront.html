@@ -22,6 +22,7 @@
       display:flex;
       flex-direction:column;
     }
+    a{color:inherit}
     header{
       position:sticky;top:0;z-index:50;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);
       border-bottom:2px solid var(--pink);
@@ -58,11 +59,16 @@
     .swatch{width:28px;height:28px;border:2px solid #fff;outline:2px solid #000;cursor:pointer;transition:transform 0.2s ease}
     .swatch:hover{transform:scale(1.1)}
     .swatch.black{background:#111}
-    .swatch.white{background:#eee}
-    .size{padding:6px 10px;border:2px solid #fff;background:#000;color:#fff;cursor:not-allowed;opacity:.6;min-height:32px;transition:all 0.2s ease}
+    /* .swatch.white{background:#eee}  -- keeping for later */
+    .size{padding:6px 10px;border:2px solid #fff;background:#000;color:#fff;cursor:pointer;opacity:.9;min-height:32px;transition:all 0.2s ease}
+    .size[disabled]{cursor:not-allowed;opacity:.6}
+    .size.active{background:#fff;color:#000;border-color:#000;box-shadow:3px 3px 0 #000;transform:rotate(-1deg)}
     .note{font-size:13px;opacity:.7;margin-top:6px}
 
-    .buy{display:flex;gap:10px;margin-top:16px}
+    .qty-row{display:flex;align-items:center;gap:10px;margin-top:8px}
+    .qty-input{width:64px;padding:8px;border:2px solid #fff;background:#000;color:#fff;font-family:'Staatliches',sans-serif;font-size:16px}
+
+    .buy{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
     .btn{padding:12px 16px;border:0;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;transition:all 0.2s ease;min-height:44px}
     .btn.primary{background:var(--pink);color:#fff;transform:rotate(-1deg)}
     .btn.primary:hover:not([disabled]){transform:rotate(0deg) scale(1.02)}
@@ -71,23 +77,67 @@
     .btn.ghost:hover{background:#fff;color:#000}
 
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-    
-    /* Mobile responsive design */
+
+    /* Gallery */
+    .gallery{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+    .gallery img{height:180px;border:2px solid #fff;background:#000;cursor:pointer;transition:transform .15s}
+    .gallery img:hover{transform:scale(1.03) rotate(-1deg)}
+
+    /* Preview modal */
+    .preview{
+      position:fixed;inset:0;background:rgba(0,0,0,.9);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity .2s;z-index:1000
+    }
+    .preview.show{opacity:1;pointer-events:auto}
+    .preview img{max-width:92vw;max-height:88vh;border:3px solid var(--pink);background:#111}
+
+    /* Cart drawer */
+    .drawer{
+      position:fixed;top:0;right:-420px;width:420px;max-width:90vw;height:100dvh;background:#0b0b0b;color:#fff;border-left:3px solid var(--pink);
+      box-shadow:-8px 0 0 var(--pink);transition:right .25s ease;z-index:1100;display:flex;flex-direction:column
+    }
+    .drawer.open{right:0}
+    .drawer header{border-bottom:2px solid var(--pink);padding:14px 16px}
+    .drawer h4{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px}
+    .drawer .content{padding:14px 16px;overflow:auto;flex:1}
+    .line{display:flex;justify-content:space-between;margin:6px 0}
+    .mini{opacity:.8;font-size:13px}
+    .checkout{border-top:2px solid var(--pink);padding:12px 16px}
+    .field{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+    .field input,.field select,.field textarea{
+      background:#000;border:2px solid #fff;color:#fff;padding:10px;font-family:'Staatliches',sans-serif
+    }
+
+    /* Back to questions button */
+    .back-btn{
+      display:inline-block;
+      background:var(--green);
+      color:#000;
+      border:3px solid #000;
+      padding:12px 18px;
+      font-family:'Bebas Neue',sans-serif;
+      text-decoration:none;
+      letter-spacing:1px;
+      transform:rotate(-2deg);
+      box-shadow:5px 5px 0 #000;
+      transition:all .2s ease;
+    }
+    .back-btn:hover{
+      background:#000;color:var(--pink);border-color:var(--pink);transform:rotate(1deg) scale(1.05)
+    }
+
+    /* Mobile */
     @media (max-width:920px){
       .grid-2{grid-template-columns:1fr}
       .h-title{font-size:48px}
       .hero-logo{height:100px}
     }
-    
     @media (max-width:768px){
       .wrap{padding:12px 16px}
       .wordmark{font-size:48px;letter-spacing:6px}
       .logo-img{height:48px}
       .h-title{font-size:36px}
-      .hero-logo{height:80px}
-      .h-sub{font-size:16px}
-      .p-name{font-size:32px}
-      .price{font-size:28px}
       .hero{padding:30px 16px}
       .card{padding:16px}
       .btn{padding:10px 14px;font-size:14px}
@@ -98,12 +148,10 @@
       nav a{font-size:14px}
       .cta{font-size:16px;padding:8px 12px}
     }
-    
     @media (max-width:480px){
       .wordmark{font-size:36px;letter-spacing:4px}
       .logo-img{height:40px}
       .h-title{font-size:28px}
-      .hero-logo{height:60px}
       .h-sub{font-size:14px}
       .p-name{font-size:28px}
       .price{font-size:24px}
@@ -137,9 +185,12 @@
       <nav>
         <a href="#product">Product</a>
         <a href="#details">Details</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#mission">Mission</a>
+        <a href="#jokes">Jokes</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
-        <button class="cta" disabled>Cart (coming)</button>
+        <button class="cta" id="openCartBtn">Cart</button>
       </nav>
     </div>
   </header>
@@ -155,27 +206,37 @@
     <div class="grid-2">
       <div class="card" id="details">
         <h2 class="p-name">QULTURE Hoodie</h2>
-        <div class="price">$XX.00</div>
+        <div class="price">$35.00</div>
+
         <div class="swatches" aria-label="Color">
           <div class="swatch black" title="Black"></div>
-          <div class="swatch white" title="(Alt) White"></div>
+          <!-- <div class="swatch white" title="(Alt) White"></div> -->
         </div>
+
         <div class="sizes" aria-label="Sizes">
-          <button class="size" disabled>XS</button>
-          <button class="size" disabled>S</button>
-          <button class="size" disabled>M</button>
-          <button class="size" disabled>L</button>
-          <button class="size" disabled>XL</button>
-          <button class="size" disabled>2XL</button>
+          <button class="size" data-size="XS">XS</button>
+          <button class="size" data-size="S">S</button>
+          <button class="size" data-size="M">M</button>
+          <button class="size" data-size="L">L</button>
+          <button class="size" data-size="XL">XL</button>
+          <button class="size" data-size="2XL">2XL</button>
         </div>
+
+        <div class="qty-row">
+          <label for="qty" class="mini">Qty</label>
+          <input id="qty" type="number" min="1" value="1" class="qty-input">
+        </div>
+
         <div class="buy">
-          <button class="btn primary" disabled>Preorder (soon)</button>
-          <a class="btn ghost" href="#faq">Size & Care</a>
+          <button class="btn primary" id="addToCart" disabled>Add to cart</button>
+          <a class="btn ghost" href="#sizecare">Size & Care</a>
         </div>
-        <p class="note">This is a non-functional storefront preview. Add-to-cart and checkout will be enabled closer to launch.</p>
+
+        <p class="note">This is a functional demo cart. Checkout collects details locally; payment/email hooks come later.</p>
+
         <ul class="list" style="margin-top:14px">
           <li>Heavyweight fleece (10–13 oz), soft hand screen print</li>
-          <li>Large back QR: scanable from 5–8 ft; sleeve micro-QR facing wearer</li>
+          <li>Large back QR: scannable from 5–8 ft; sleeve micro-QR facing wearer</li>
           <li>Error correction level H, preserved quiet zone for reliable scans</li>
           <li>Unisex, slightly oversized fit</li>
         </ul>
@@ -183,27 +244,239 @@
 
       <div class="card">
         <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Why it works</h3>
-        <p style="margin-top:8px;opacity:.9">You bring the vibe, the hoodie brings the prompt. Scan, laugh, and skip small talk with better questions. Designed to be scan-friendly in low light and printed to survive weekly washes.</p>
+        <p style="margin-top:8px;opacity:.9">
+          You bring the vibe, the hoodie brings the prompt. The QR is tuned for contrast, distance, and that
+          “wait… scan that?” curiosity spike. It survives dim bars, bright sun, and small talk. You’ll make strangers laugh,
+          friends think, and first dates a whole lot less weird. Batteries not included. Also not required.
+        </p>
+        <p style="margin-top:8px;opacity:.9">
+          We keep the quiet zone clean, the error correction beefy, and the pixels chunky enough to read from across a room.
+          Translation: people scan it, it works, and you look like the kind of person who plans fun.
+        </p>
       </div>
     </div>
 
+    <!-- GALLERY -->
+    <div class="card" id="gallery" style="margin-top:20px">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Gallery</h3>
+      <div class="gallery">
+        <img src="Assets/mockup-front.png" alt="Front view" onclick="openPreview(this.src)">
+        <img src="Assets/mockup-back.png" alt="Back view" onclick="openPreview(this.src)">
+        <img src="Assets/mockup-left.png" alt="Left sleeve view" onclick="openPreview(this.src)">
+        <img src="Assets/mockup-right.png" alt="Right sleeve view" onclick="openPreview(this.src)">
+      </div>
+    </div>
+
+    <!-- MISSION -->
+    <div class="card" id="mission">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Mission</h3>
+      <p style="margin-top:8px;opacity:.9">
+        QULTURE makes <em>wearable connection</em>. Every drop uses a bold, scannable QR that opens something designed to
+        pull people closer—questions, games, dares, jokes, you name it. Think of it like giving your hoodie social super-powers,
+        minus the cape and the complicated origin story. The goal is simple: help humans start better conversations in the wild,
+        one scan at a time.
+      </p>
+    </div>
+
+    <!-- JOKES COUNTDOWN -->
+    <div class="card" id="jokes">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Jokes coming soon</h3>
+      <p class="note">A jokes QR drop lands on <strong>Feb 9</strong>. Count down with us:</p>
+      <div id="countdown" style="font-family:'Bebas Neue',sans-serif;font-size:42px;margin-top:8px;letter-spacing:2px;text-shadow:-1px -1px 0 var(--pink),1px 1px 0 var(--pink)">
+        --d --h --m --s
+      </div>
+    </div>
+
+    <!-- SIZE & CARE -->
+    <div class="card" id="sizecare">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">Size & Care</h3>
+      <ul class="list" style="margin-top:8px">
+        <li>Fit: unisex, slightly oversized. If between sizes, size down for a truer fit.</li>
+        <li>Care: turn inside out, cold wash, tumble low or hang dry. Don’t iron the print (unless you like chaos).</li>
+        <li>Fabric: heavyweight fleece (10–13 oz), soft hand inks.</li>
+      </ul>
+    </div>
+
+    <!-- FAQ -->
     <div class="card" id="faq" style="margin-top:20px">
-      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">FAQ (placeholder)</h3>
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">FAQ</h3>
       <details style="margin-top:10px"><summary>Will the QR scan off fabric?</summary><p class="note">Yes. We print in high contrast with a preserved quiet zone and ECC H. Final tests will be shared before launch.</p></details>
-      <details style="margin-top:10px"><summary>When can I buy?</summary><p class="note">We’re polishing samples. Check back soon — this page will become the live product.</p></details>
-      <details style="margin-top:10px"><summary>Returns & exchanges?</summary><p class="note">Standard 30‑day returns/exchanges will apply at launch.</p></details>
+      <details style="margin-top:10px"><summary>When can I buy?</summary><p class="note">Soon™. This cart saves your details; full payment will open after sampling.</p></details>
+      <details style="margin-top:10px"><summary>Returns & exchanges?</summary><p class="note">Standard 30-day returns/exchanges will apply at launch.</p></details>
     </div>
   </main>
 
   <footer id="contact">
     <div class="wrap" style="padding:20px">
       <div class="mono">© <span id="y"></span> QULTURE • Scan. Ask. Connect.</div>
-      <a class="mono" href="index.html" style="text-decoration:none;color:#fff">← Back to Questions</a>
+      <a class="back-btn" href="index.html">← Back to Questions</a>
+      <div class="mono" style="text-align:right">
+        <div><strong>Contact:</strong> Shems Beblawi</div>
+        <div>Phone: +1 (480) 274-5159</div>
+        <div>Email: <a href="mailto:dissismyemail@gmail.com">dissismyemail@gmail.com</a></div>
+      </div>
     </div>
   </footer>
 
+  <!-- Image preview modal -->
+  <div id="preview" class="preview" onclick="this.classList.remove('show')">
+    <img alt="Preview">
+  </div>
+
+  <!-- Cart Drawer -->
+  <aside id="cartDrawer" class="drawer" aria-hidden="true">
+    <header style="display:flex;justify-content:space-between;align-items:center">
+      <h4>Cart</h4>
+      <button class="btn ghost" id="closeCartBtn">Close</button>
+    </header>
+    <div class="content">
+      <div id="cartLines"></div>
+      <div class="line"><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
+    </div>
+    <div class="checkout">
+      <form id="checkoutForm">
+        <div class="field">
+          <label>Name</label>
+          <input required name="name" placeholder="Full name">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input required type="email" name="email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label>Phone</label>
+          <input name="phone" placeholder="+1 (___) ___-____">
+        </div>
+        <div class="field">
+          <label>Address</label>
+          <input required name="address1" placeholder="Street address">
+          <input name="address2" placeholder="Apt / Suite (optional)">
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px">
+          <div class="field"><label>City</label><input required name="city"></div>
+          <div class="field"><label>State</label><input required name="state"></div>
+          <div class="field"><label>ZIP</label><input required name="zip"></div>
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea name="notes" rows="3" placeholder="Anything we should know?"></textarea>
+        </div>
+        <button class="btn primary" type="submit" style="width:100%">Place placeholder order</button>
+        <p class="mini" style="margin-top:6px">This saves your order locally (no payment yet). We'll wire email/payment later.</p>
+      </form>
+    </div>
+  </aside>
+
   <script>
+    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Image preview
+    function openPreview(src){
+      const box = document.getElementById('preview');
+      box.querySelector('img').src = src;
+      box.classList.add('show');
+    }
+
+    // Product config
+    const PRICE = 35.00;
+
+    // Size selection
+    let selectedSize = null;
+    const sizeButtons = [...document.querySelectorAll('.size')];
+    const addToCartBtn = document.getElementById('addToCart');
+    sizeButtons.forEach(b=>{
+      b.addEventListener('click', ()=>{
+        sizeButtons.forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        selectedSize = b.dataset.size;
+        addToCartBtn.disabled = false;
+      });
+    });
+
+    // Qty
+    const qtyInput = document.getElementById('qty');
+
+    // Cart state
+    const cart = [];
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartLines = document.getElementById('cartLines');
+    const subtotalEl = document.getElementById('subtotal');
+
+    function fmt(n){ return `$${n.toFixed(2)}`; }
+
+    function renderCart(){
+      cartLines.innerHTML = '';
+      let subtotal = 0;
+      cart.forEach((line, i)=>{
+        subtotal += line.qty * line.price;
+        const row = document.createElement('div');
+        row.className = 'line';
+        row.innerHTML = `
+          <span>${line.product} — <strong>${line.size}</strong> × ${line.qty}</span>
+          <span>${fmt(line.qty*line.price)}</span>
+        `;
+        cartLines.appendChild(row);
+      });
+      subtotalEl.textContent = fmt(subtotal);
+    }
+
+    function openCart(){ cartDrawer.classList.add('open'); cartDrawer.setAttribute('aria-hidden','false'); }
+    function closeCart(){ cartDrawer.classList.remove('open'); cartDrawer.setAttribute('aria-hidden','true'); }
+
+    document.getElementById('openCartBtn').addEventListener('click', openCart);
+    document.getElementById('closeCartBtn').addEventListener('click', closeCart);
+
+    // Add to cart
+    addToCartBtn.addEventListener('click', ()=>{
+      const qty = Math.max(1, parseInt(qtyInput.value||'1',10));
+      if(!selectedSize) return;
+      cart.push({
+        product:'QULTURE Hoodie',
+        size:selectedSize,
+        qty,
+        price:PRICE
+      });
+      renderCart();
+      openCart();
+    });
+
+    // Checkout form (placeholder)
+    const checkoutForm = document.getElementById('checkoutForm');
+    checkoutForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      if(cart.length===0){ alert('Your cart is empty. Add a hoodie first.'); return; }
+      const data = Object.fromEntries(new FormData(checkoutForm).entries());
+      const order = { items:cart, customer:data, subtotal: subtotalEl.textContent, createdAt:new Date().toISOString() };
+      // Save locally so you can inspect it (and wire email later)
+      localStorage.setItem('qultureLastOrder', JSON.stringify(order));
+      console.log('QULTURE placeholder order:', order);
+      alert('Order captured locally! We’ll add payment + email next.');
+      // Reset cart
+      cart.length = 0; renderCart(); closeCart();
+      checkoutForm.reset();
+    });
+
+    // Countdown to next Feb 9
+    function nextFeb9(){
+      const now = new Date();
+      let year = now.getFullYear();
+      const target = new Date(year, 1, 9, 0,0,0); // month index 1 = Feb
+      if(target <= now) target.setFullYear(year+1);
+      return target;
+    }
+    const countdownEl = document.getElementById('countdown');
+    function tick(){
+      const t = nextFeb9() - new Date();
+      const s = Math.max(0, Math.floor(t/1000));
+      const d = Math.floor(s/86400);
+      const h = Math.floor((s%86400)/3600);
+      const m = Math.floor((s%3600)/60);
+      const sec = s%60;
+      countdownEl.textContent = `${d}d ${h}h ${m}m ${sec}s`;
+      requestAnimationFrame(()=>setTimeout(tick, 1000));
+    }
+    tick();
   </script>
 </body>
 </html>
