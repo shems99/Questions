@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>QULTURE — Modern Collection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#faf9f7;
+      --card:#ffffff;
+      --ink:#1e293b;
+      --orange:#f97316;
+      --green:#10b981;
+      --gray:#64748b;
+      --light-gray:#f1f5f9;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Inter', system-ui, -apple-system, sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      line-height:1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    header{
+      position:sticky;top:0;z-index:50;background:rgba(248,250,252,.95);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--light-gray);
+    }
+    .wrap{max-width:1200px;margin:0 auto;padding:20px 24px}
+    .brand{display:flex;align-items:center;gap:16px;text-decoration:none}
+    .logo-img{height:48px}
+    .wordmark-logo{
+      height:48px;
+    }
+    nav{display:flex;align-items:center;gap:32px}
+    nav a{color:var(--ink);text-decoration:none;font-weight:500;font-size:15px;transition:color 0.2s ease}
+    nav a:hover{color:var(--orange)}
+    .cta{background:var(--orange);color:#fff;border:none;padding:12px 24px;font-weight:600;font-size:15px;cursor:pointer;border-radius:8px;transition:all 0.2s ease}
+    .cta:hover{background:#ea580c;transform:translateY(-1px)}
+
+    .hero{position:relative;overflow:hidden;text-align:center;padding:80px 24px;background:linear-gradient(135deg, #faf9f7 0%, #ffffff 100%)}
+    .hero-logo{height:120px;margin-bottom:32px}
+    .h-title{font-family:'Space Grotesk',sans-serif;font-size:56px;line-height:1.1;font-weight:700;color:var(--ink);margin-bottom:16px}
+    .h-sub{margin-top:16px;font-size:18px;color:var(--gray);max-width:600px;margin-left:auto;margin-right:auto;font-weight:400}
+    .badge{display:inline-block;margin-top:24px;padding:8px 16px;border:2px solid var(--green);color:var(--green);border-radius:20px;font-weight:500;font-size:14px}
+
+    .card{background:var(--card);border:1px solid var(--light-gray);border-radius:16px;padding:32px;position:relative;margin-top:24px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+    .card::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:16px;background:linear-gradient(135deg, rgba(16,185,129,.02) 0%, rgba(249,115,22,.02) 100%)}
+
+    .p-name{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:600;color:var(--ink)}
+    .price{font-family:'Space Grotesk',sans-serif;font-size:28px;color:var(--orange);font-weight:700}
+    .swatches, .sizes{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+    .swatch{width:32px;height:32px;border:2px solid var(--light-gray);border-radius:8px;cursor:pointer;transition:all 0.2s ease}
+    .swatch:hover{transform:scale(1.1);border-color:var(--orange)}
+    .swatch.black{background:#1e293b}
+    .size{padding:8px 16px;border:2px solid var(--light-gray);background:var(--card);color:var(--ink);cursor:pointer;border-radius:8px;min-height:40px;transition:all 0.2s ease;font-weight:500}
+    .size[disabled]{cursor:not-allowed;opacity:.5}
+    .size.active{background:var(--orange);color:#fff;border-color:var(--orange);transform:translateY(-1px)}
+    .note{font-size:14px;color:var(--gray);margin-top:8px}
+
+    .qty-row{display:flex;align-items:center;gap:12px;margin-top:12px}
+    .qty-input{width:80px;padding:8px 12px;border:2px solid var(--light-gray);background:var(--card);color:var(--ink);font-family:'Inter',sans-serif;font-size:15px;border-radius:8px}
+
+    .buy{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+    .btn{padding:14px 24px;border:0;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;transition:all 0.2s ease;min-height:48px;font-size:15px;border-radius:8px}
+    .btn.primary{background:var(--orange);color:#fff}
+    .btn.primary:hover:not([disabled]){background:#ea580c;transform:translateY(-1px)}
+    .btn.primary[disabled]{background:var(--gray);cursor:not-allowed}
+    .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--light-gray)}
+    .btn.ghost:hover{background:var(--light-gray);border-color:var(--gray)}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+
+    /* Gallery */
+    .gallery{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;justify-content:center}
+    .gallery img{height:200px;border:1px solid var(--light-gray);background:var(--card);cursor:pointer;transition:all 0.2s ease;border-radius:12px}
+    .gallery img:hover{transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.15)}
+
+    /* Preview modal */
+    .preview{
+      position:fixed;inset:0;background:rgba(0,0,0,.8);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;transition:opacity .3s;z-index:1000
+    }
+    .preview.show{opacity:1;pointer-events:auto}
+    .preview img{max-width:90vw;max-height:85vh;border:1px solid var(--light-gray);background:var(--card);border-radius:12px}
+
+    /* Cart drawer */
+    .drawer{
+      position:fixed;top:0;right:-420px;width:420px;max-width:90vw;height:100dvh;background:var(--card);color:var(--ink);border-left:1px solid var(--light-gray);
+      box-shadow:-8px 0 25px rgba(0,0,0,.1);transition:right .3s ease;z-index:1100;display:flex;flex-direction:column
+    }
+    .drawer.open{right:0}
+    .drawer header{border-bottom:1px solid var(--light-gray);padding:20px 24px}
+    .drawer h4{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600}
+    .drawer .content{padding:20px 24px;overflow:auto;flex:1}
+    .line{display:flex;justify-content:space-between;margin:8px 0;padding:8px 0;border-bottom:1px solid var(--light-gray)}
+    .mini{color:var(--gray);font-size:14px}
+    .checkout{border-top:1px solid var(--light-gray);padding:20px 24px}
+    .field{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+    .field input,.field select,.field textarea{
+      background:var(--card);border:2px solid var(--light-gray);color:var(--ink);padding:12px;font-family:'Inter',sans-serif;border-radius:8px
+    }
+
+    /* Back to questions button */
+    .back-btn{
+      display:inline-block;
+      background:var(--green);
+      color:#fff;
+      border:2px solid var(--green);
+      padding:12px 24px;
+      font-family:'Inter',sans-serif;
+      text-decoration:none;
+      font-weight:600;
+      border-radius:8px;
+      transition:all .2s ease;
+    }
+    .back-btn:hover{
+      background:#059669;border-color:#059669;transform:translateY(-1px)
+    }
+
+    /* Mobile */
+    @media (max-width:920px){
+      .grid-2{grid-template-columns:1fr}
+      .h-title{font-size:48px}
+      .hero-logo{height:100px}
+    }
+    @media (max-width:768px){
+      .wrap{padding:16px 20px}
+      .wordmark-logo{height:40px}
+      .logo-img{height:40px}
+      .h-title{font-size:40px}
+      .hero{padding:60px 20px}
+      .card{padding:24px}
+      .btn{padding:12px 20px;font-size:14px}
+      .swatches,.sizes{gap:10px}
+      .swatch{width:28px;height:28px}
+      .size{padding:6px 12px;font-size:14px}
+      nav{gap:20px}
+      nav a{font-size:14px}
+      .cta{font-size:14px;padding:10px 20px}
+    }
+    @media (max-width:480px){
+      .wordmark-logo{height:36px}
+      .logo-img{height:36px}
+      .h-title{font-size:32px}
+      .h-sub{font-size:16px}
+      .p-name{font-size:28px}
+      .price{font-size:24px}
+      .hero{padding:40px 16px}
+      .card{padding:20px}
+      .btn{padding:10px 16px;font-size:13px}
+      .swatch{width:24px;height:24px}
+      .size{padding:5px 10px;font-size:13px}
+      nav{gap:16px}
+      nav a{font-size:13px}
+      .cta{font-size:13px;padding:8px 16px}
+      .wrap{padding:12px 16px}
+      footer .wrap{flex-direction:column;text-align:center;gap:12px}
+    }
+
+    .list{margin-top:16px}
+    .list li{margin-left:20px;margin-bottom:8px;color:var(--gray)}
+
+    footer{margin-top:auto;border-top:1px solid var(--light-gray);background:var(--card)}
+    footer .wrap{display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .mono{font-size:14px;color:var(--gray)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:20px">
+      <a class="brand" href="#" onclick="event.preventDefault()">
+        <img src="Green and Orange.png" alt="QULTURE Logo" class="logo-img">
+        <img src="QULTURE_greenorange1.png" alt="QULTURE" class="wordmark-logo">
+      </a>
+      <nav>
+        <a href="#product">Product</a>
+        <a href="#details">Details</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#mission">Mission</a>
+        <a href="#jokes">Jokes</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+        <button class="cta" id="openCartBtn">Cart</button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <img src="Green and Orange.png" alt="QULTURE Logo" class="hero-logo">
+    <h1 class="h-title">Connect through conversation.</h1>
+    <p class="h-sub">The QULTURE hoodie features a clean, modern QR design that sparks meaningful connections through thoughtful questions.</p>
+    <span class="badge">Modern Collection — Limited Edition</span>
+  </section>
+
+  <main id="product" class="wrap" style="padding:32px 24px 80px">
+    <div class="grid-2">
+      <div class="card" id="details">
+        <h2 class="p-name">QULTURE Hoodie</h2>
+        <div class="price">$35.00</div>
+
+        <div class="swatches" aria-label="Color">
+          <div class="swatch black" title="Black"></div>
+        </div>
+
+        <div class="sizes" aria-label="Sizes">
+          <button class="size" data-size="XS">XS</button>
+          <button class="size" data-size="S">S</button>
+          <button class="size" data-size="M">M</button>
+          <button class="size" data-size="L">L</button>
+          <button class="size" data-size="XL">XL</button>
+          <button class="size" data-size="2XL">2XL</button>
+        </div>
+
+        <div class="qty-row">
+          <label for="qty" class="mini">Quantity</label>
+          <input id="qty" type="number" min="1" value="1" class="qty-input">
+        </div>
+
+        <div class="buy">
+          <button class="btn primary" id="addToCart" disabled>Add to cart</button>
+          <a class="btn ghost" href="#sizecare">Size & Care</a>
+        </div>
+
+        <p class="note">Modern design meets meaningful connection. Each hoodie is crafted for comfort and conversation.</p>
+
+        <ul class="list" style="margin-top:20px">
+          <li>Premium cotton blend for all-day comfort</li>
+          <li>Minimalist QR design: clean, scannable, intentional</li>
+          <li>High-contrast printing for reliable scanning</li>
+          <li>Unisex fit designed for everyone</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="card" id="gallery" style="margin-top:24px">
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600">Gallery</h3>
+      <div class="gallery">
+        <img src="mockup-front-grorange.png" alt="Front view" onclick="openPreview(this.src)">
+        <img src="mockup-back-grorange.png" alt="Back view" onclick="openPreview(this.src)">
+      </div>
+    </div>
+
+    <!-- MISSION -->
+    <div class="card" id="mission">
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600">Mission</h3>
+      <p style="margin-top:12px;color:var(--gray);line-height:1.6">
+        QULTURE creates <em>intentional connection</em>. Our modern approach to wearable technology focuses on 
+        meaningful conversations over quick interactions. Each piece is designed to spark genuine human connection 
+        through thoughtful questions and authentic moments. We believe in the power of slowing down, being present, 
+        and creating space for real conversations in our fast-paced world.
+      </p>
+    </div>
+
+    <!-- WHY IT WORKS -->
+    <div class="card">
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600">Why it works</h3>
+      <p style="margin-top:12px;color:var(--gray);line-height:1.6">
+        Clean design meets thoughtful functionality. The QR code is intentionally minimal, designed to blend 
+        seamlessly with your style while remaining easily scannable. It works in any environment—from coffee shops 
+        to conference rooms—and creates natural conversation starters that feel authentic, not forced.
+      </p>
+      <p style="margin-top:12px;color:var(--gray);line-height:1.6">
+        We prioritize quality over quantity, ensuring each scan leads to meaningful interaction. The questions are 
+        curated to spark genuine curiosity and connection, helping you build relationships that matter.
+      </p>
+    </div>
+
+    <!-- JOKES COUNTDOWN -->
+    <div class="card" id="jokes">
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600">Coming soon</h3>
+      <p class="note">A new collection of conversation starters launches <strong>Feb 9</strong>. Join the waitlist:</p>
+      <div id="countdown" style="font-family:'Space Grotesk',sans-serif;font-size:32px;margin-top:12px;font-weight:600;color:var(--orange)">
+        --d --h --m --s
+      </div>
+    </div>
+
+    <!-- SIZE & CARE -->
+    <div class="card" id="sizecare">
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600">Size & Care</h3>
+      <ul class="list" style="margin-top:12px">
+        <li>Fit: Unisex, relaxed fit. True to size for comfort.</li>
+        <li>Care: Machine wash cold, tumble dry low. Iron on low heat if needed.</li>
+        <li>Fabric: Premium cotton blend, soft and durable.</li>
+      </ul>
+    </div>
+
+    <!-- FAQ -->
+    <div class="card" id="faq" style="margin-top:24px">
+      <h3 style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:600">FAQ</h3>
+      <details style="margin-top:12px"><summary>Will the QR scan reliably?</summary><p class="note">Yes. We use high-contrast printing and optimal sizing for consistent scanning across all devices.</p></details>
+      <details style="margin-top:12px"><summary>When can I purchase?</summary><p class="note">Pre-orders open soon. Join our waitlist to be notified when available.</p></details>
+      <details style="margin-top:12px"><summary>Returns & exchanges?</summary><p class="note">30-day returns and exchanges available. We want you to love your QULTURE piece.</p></details>
+    </div>
+  </main>
+
+  <footer id="contact">
+    <div class="wrap" style="padding:24px">
+      <div class="mono">© <span id="y"></span> QULTURE • Connect. Question. Grow.</div>
+      <a class="back-btn" href="../index.html">← Back to Questions</a>
+      <div class="mono" style="text-align:right">
+        <div><strong>Contact:</strong> Shems Beblawi</div>
+        <div>Phone: +1 (480) 274-5159</div>
+        <div>Email: <a href="mailto:dissismyemail@gmail.com">dissismyemail@gmail.com</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Image preview modal -->
+  <div id="preview" class="preview" onclick="this.classList.remove('show')">
+    <img alt="Preview">
+  </div>
+
+  <!-- Cart Drawer -->
+  <aside id="cartDrawer" class="drawer" aria-hidden="true">
+    <header style="display:flex;justify-content:space-between;align-items:center">
+      <h4>Cart</h4>
+      <button class="btn ghost" id="closeCartBtn">Close</button>
+    </header>
+    <div class="content">
+      <div id="cartLines"></div>
+      <div class="line"><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
+    </div>
+    <div class="checkout">
+      <form id="checkoutForm">
+        <div class="field">
+          <label>Name</label>
+          <input required name="name" placeholder="Full name">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input required type="email" name="email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label>Phone</label>
+          <input name="phone" placeholder="+1 (___) ___-____">
+        </div>
+        <div class="field">
+          <label>Address</label>
+          <input required name="address1" placeholder="Street address">
+          <input name="address2" placeholder="Apt / Suite (optional)">
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px">
+          <div class="field"><label>City</label><input required name="city"></div>
+          <div class="field"><label>State</label><input required name="state"></div>
+          <div class="field"><label>ZIP</label><input required name="zip"></div>
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <textarea name="notes" rows="3" placeholder="Anything we should know?"></textarea>
+        </div>
+        <button class="btn primary" type="submit" style="width:100%">Place order</button>
+        <p class="mini" style="margin-top:8px">Secure checkout with modern payment processing.</p>
+      </form>
+    </div>
+  </aside>
+
+  <script>
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Image preview
+    function openPreview(src){
+      const box = document.getElementById('preview');
+      box.querySelector('img').src = src;
+      box.classList.add('show');
+    }
+
+    // Product config
+    const PRICE = 35.00;
+
+    // Size selection
+    let selectedSize = null;
+    const sizeButtons = [...document.querySelectorAll('.size')];
+    const addToCartBtn = document.getElementById('addToCart');
+    sizeButtons.forEach(b=>{
+      b.addEventListener('click', ()=>{
+        sizeButtons.forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        selectedSize = b.dataset.size;
+        addToCartBtn.disabled = false;
+      });
+    });
+
+    // Qty
+    const qtyInput = document.getElementById('qty');
+
+    // Cart state
+    const cart = [];
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartLines = document.getElementById('cartLines');
+    const subtotalEl = document.getElementById('subtotal');
+
+    function fmt(n){ return `$${n.toFixed(2)}`; }
+
+    function renderCart(){
+      cartLines.innerHTML = '';
+      let subtotal = 0;
+      cart.forEach((line, i)=>{
+        subtotal += line.qty * line.price;
+        const row = document.createElement('div');
+        row.className = 'line';
+        row.innerHTML = `
+          <span>${line.product} — <strong>${line.size}</strong> × ${line.qty}</span>
+          <span>${fmt(line.qty*line.price)}</span>
+        `;
+        cartLines.appendChild(row);
+      });
+      subtotalEl.textContent = fmt(subtotal);
+    }
+
+    function openCart(){ cartDrawer.classList.add('open'); cartDrawer.setAttribute('aria-hidden','false'); }
+    function closeCart(){ cartDrawer.classList.remove('open'); cartDrawer.setAttribute('aria-hidden','true'); }
+
+    document.getElementById('openCartBtn').addEventListener('click', openCart);
+    document.getElementById('closeCartBtn').addEventListener('click', closeCart);
+
+    // Add to cart
+    addToCartBtn.addEventListener('click', ()=>{
+      const qty = Math.max(1, parseInt(qtyInput.value||'1',10));
+      if(!selectedSize) return;
+      cart.push({
+        product:'QULTURE Hoodie',
+        size:selectedSize,
+        qty,
+        price:PRICE
+      });
+      renderCart();
+      openCart();
+    });
+
+    // Checkout form (placeholder)
+    const checkoutForm = document.getElementById('checkoutForm');
+    checkoutForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      if(cart.length===0){ alert('Your cart is empty. Add a hoodie first.'); return; }
+      const data = Object.fromEntries(new FormData(checkoutForm).entries());
+      const order = { items:cart, customer:data, subtotal: subtotalEl.textContent, createdAt:new Date().toISOString() };
+      // Save locally so you can inspect it (and wire email later)
+      localStorage.setItem('qultureModernOrder', JSON.stringify(order));
+      console.log('QULTURE Modern order:', order);
+      alert('Order captured! We\'ll process this soon.');
+      // Reset cart
+      cart.length = 0; renderCart(); closeCart();
+      checkoutForm.reset();
+    });
+
+    // Countdown to next Feb 9
+    function nextFeb9(){
+      const now = new Date();
+      let year = now.getFullYear();
+      const target = new Date(year, 1, 9, 0,0,0); // month index 1 = Feb
+      if(target <= now) target.setFullYear(year+1);
+      return target;
+    }
+    const countdownEl = document.getElementById('countdown');
+    function tick(){
+      const t = nextFeb9() - new Date();
+      const s = Math.max(0, Math.floor(t/1000));
+      const d = Math.floor(s/86400);
+      const h = Math.floor((s%86400)/3600);
+      const m = Math.floor((s%3600)/60);
+      const sec = s%60;
+      countdownEl.textContent = `${d}d ${h}h ${m}m ${sec}s`;
+      requestAnimationFrame(()=>setTimeout(tick, 1000));
+    }
+    tick();
+  </script>
+</body>
+</html>
