@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>QULTURE — Out of Stock</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Staatliches&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#000000;
+      --card:#111111;
+      --ink:#ffffff;
+      --pink:#ff0066;
+      --green:#9dff57;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Staatliches', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    a{color:inherit}
+    header{
+      position:sticky;top:0;z-index:50;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);
+      border-bottom:2px solid var(--pink);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:16px 20px}
+    .brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+    .logo-img{height:64px}
+    .wordmark{
+      font-family:'Bebas Neue',sans-serif;
+      font-size:64px;
+      letter-spacing:8px;
+      color:#fff;
+      text-shadow:-1px -1px 0 var(--pink),1px -1px 0 var(--pink),-1px 1px 0 var(--pink),1px 1px 0 var(--pink);
+      text-transform:uppercase;
+    }
+    nav{display:flex;align-items:center;gap:18px}
+    nav a{color:var(--ink);text-decoration:none;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;transition:color 0.2s ease}
+    nav a:hover{color:var(--pink)}
+
+    .hero{position:relative;overflow:hidden;text-align:center;padding:60px 20px}
+    .hero-logo{height:140px;margin-bottom:30px}
+    .h-title{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:.95;text-transform:uppercase;text-shadow:-1px -1px 0 var(--pink),1px -1px 0 var(--pink),-1px 1px 0 var(--pink),1px 1px 0 var(--pink)}
+    .h-sub{margin-top:20px;font-size:20px;opacity:.9;max-width:700px;margin-left:auto;margin-right:auto}
+    .badge{display:inline-block;margin-top:20px;padding:8px 14px;border:2px solid var(--green);color:var(--green);transform:rotate(-2deg);font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+
+    .card{background:var(--card);border:3px solid var(--pink);box-shadow:8px 8px 0 var(--pink);padding:24px;position:relative;margin-top:20px}
+    .card::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0 10px,transparent 10px 20px)}
+
+    .out-of-stock-title{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:2px;margin-bottom:16px;color:var(--pink)}
+    .out-of-stock-sub{font-size:18px;opacity:.9;margin-bottom:24px;line-height:1.4}
+
+    .notify-form{max-width:500px;margin:0 auto}
+    .field{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+    .field label{font-family:'Bebas Neue',sans-serif;letter-spacing:1px;font-size:16px}
+    .field input,.field textarea{
+      background:#000;border:2px solid #fff;color:#fff;padding:12px;font-family:'Staatliches',sans-serif;font-size:16px;transition:border-color 0.2s ease
+    }
+    .field input:focus,.field textarea:focus{outline:none;border-color:var(--pink)}
+    .field input::placeholder,.field textarea::placeholder{opacity:.6}
+
+    .btn{padding:14px 20px;border:0;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;transition:all 0.2s ease;min-height:48px;font-size:18px}
+    .btn.primary{background:var(--pink);color:#fff;transform:rotate(-1deg)}
+    .btn.primary:hover:not([disabled]){transform:rotate(0deg) scale(1.02)}
+    .btn.primary[disabled]{filter:grayscale(1);cursor:not-allowed}
+    .btn.ghost{background:transparent;color:#fff;border:2px solid #fff}
+    .btn.ghost:hover{background:#fff;color:#000}
+
+    .back-btn{
+      display:inline-block;
+      background:var(--green);
+      color:#000;
+      border:3px solid #000;
+      padding:12px 18px;
+      font-family:'Bebas Neue',sans-serif;
+      text-decoration:none;
+      letter-spacing:1px;
+      transform:rotate(-2deg);
+      box-shadow:5px 5px 0 #000;
+      transition:all .2s ease;
+    }
+    .back-btn:hover{
+      background:#000;color:var(--pink);border-color:var(--pink);transform:rotate(1deg) scale(1.05)
+    }
+
+    .success-message{
+      background:var(--green);
+      color:#000;
+      padding:16px;
+      border:2px solid #000;
+      margin-top:16px;
+      font-family:'Bebas Neue',sans-serif;
+      letter-spacing:1px;
+      text-align:center;
+      display:none;
+    }
+
+    /* Mobile */
+    @media (max-width:920px){
+      .h-title{font-size:48px}
+      .hero-logo{height:100px}
+      .out-of-stock-title{font-size:36px}
+    }
+    @media (max-width:768px){
+      .wrap{padding:12px 16px}
+      .wordmark{font-size:48px;letter-spacing:6px}
+      .logo-img{height:48px}
+      .h-title{font-size:36px}
+      .hero{padding:40px 16px}
+      .card{padding:20px}
+      .btn{padding:12px 16px;font-size:16px}
+      nav{gap:12px}
+      nav a{font-size:14px}
+    }
+    @media (max-width:480px){
+      .wordmark{font-size:36px;letter-spacing:4px}
+      .logo-img{height:40px}
+      .h-title{font-size:28px}
+      .h-sub{font-size:16px}
+      .out-of-stock-title{font-size:28px}
+      .hero{padding:30px 12px}
+      .card{padding:16px}
+      .btn{padding:10px 14px;font-size:14px}
+      nav{gap:8px}
+      nav a{font-size:12px}
+      .wrap{padding:8px 12px}
+      footer .wrap{flex-direction:column;text-align:center;gap:8px}
+    }
+
+    footer{margin-top:auto;border-top:2px solid var(--pink);background:#0a0a0a}
+    footer .wrap{display:flex;justify-content:space-between;gap:16px;align-items:center}
+    .mono{font-size:13px;opacity:.7}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+      <a class="brand" href="#" onclick="event.preventDefault()">
+        <img src="Qulture-Logo_Full-Color.png" alt="QULTURE Logo" class="logo-img">
+        <div class="wordmark">QULTURE</div>
+      </a>
+      <nav>
+        <a href="#notify">Get Notified</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <img src="Qulture-Logo_Full-Color.png" alt="QULTURE Logo" class="hero-logo">
+    <h1 class="h-title">Wear the icebreaker.</h1>
+    <p class="h-sub">The QULTURE hoodie features a high-contrast, scan-tested QR that takes people to a rotating deck of conversation-sparking questions.</p>
+    <span class="badge">First Drop — Coming Soon</span>
+  </section>
+
+  <main class="wrap" style="padding:24px 20px 60px">
+    <div class="card" id="notify">
+      <h2 class="out-of-stock-title">Out of Stock</h2>
+      <p class="out-of-stock-sub">
+        We're currently sold out of QULTURE hoodies! The demand has been incredible, and we're working hard to get more inventory ready. 
+        Leave your info below and we'll notify you as soon as we're back in stock.
+      </p>
+      
+      <form class="notify-form" id="notifyForm">
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your full name" required>
+        </div>
+        
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+        
+        <div class="field">
+          <label for="phone">Phone (optional)</label>
+          <input type="tel" id="phone" name="phone" placeholder="+1 (___) ___-____">
+        </div>
+        
+        <div class="field">
+          <label for="message">Message (optional)</label>
+          <textarea id="message" name="message" rows="3" placeholder="Any questions or requests?"></textarea>
+        </div>
+        
+        <button type="submit" class="btn primary" style="width:100%">Notify Me When Back in Stock</button>
+      </form>
+      
+      <div class="success-message" id="successMessage">
+        Thanks! We'll notify you as soon as we're back in stock. 🎉
+      </div>
+    </div>
+
+    <div class="card" id="about" style="margin-top:20px">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">About QULTURE</h3>
+      <p style="margin-top:12px;opacity:.9;line-height:1.5">
+        QULTURE makes <em>wearable connection</em>. Every drop uses a bold, scannable QR that opens something designed to
+        pull people closer—questions, games, dares, jokes, you name it. Think of it like giving your hoodie social super-powers,
+        minus the cape and the complicated origin story. The goal is simple: help humans start better conversations in the wild,
+        one scan at a time.
+      </p>
+      <p style="margin-top:12px;opacity:.9;line-height:1.5">
+        We keep the quiet zone clean, the error correction beefy, and the pixels chunky enough to read from across a room.
+        Translation: people scan it, it works, and you look like the kind of person who plans fun.
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:20px">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px">What to Expect</h3>
+      <ul style="margin-top:12px;opacity:.9;line-height:1.6">
+        <li style="margin-bottom:8px">Heavyweight fleece (10–13 oz) with soft hand screen print</li>
+        <li style="margin-bottom:8px">Large back QR: scannable from 5–8 ft; sleeve micro-QR facing wearer</li>
+        <li style="margin-bottom:8px">Error correction level H, preserved quiet zone for reliable scans</li>
+        <li style="margin-bottom:8px">Unisex, slightly oversized fit</li>
+        <li style="margin-bottom:8px">Price: $35.00</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer id="contact">
+    <div class="wrap" style="padding:20px">
+      <div class="mono">© <span id="y"></span> QULTURE • Scan. Ask. Connect.</div>
+      <a class="back-btn" href="index.html">← Back to Questions</a>
+      <div class="mono" style="text-align:right">
+        <div><strong>Contact:</strong> Shems Beblawi</div>
+        <div>Phone: +1 (480) 274-5159</div>
+        <div>Email: <a href="mailto:dissismyemail@gmail.com">dissismyemail@gmail.com</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Notification form
+    const notifyForm = document.getElementById('notifyForm');
+    const successMessage = document.getElementById('successMessage');
+
+    notifyForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(notifyForm);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Store locally for now (you can add email integration later)
+      const notifications = JSON.parse(localStorage.getItem('qultureNotifications') || '[]');
+      notifications.push({
+        ...data,
+        submittedAt: new Date().toISOString()
+      });
+      localStorage.setItem('qultureNotifications', JSON.stringify(notifications));
+      
+      // Show success message
+      successMessage.style.display = 'block';
+      notifyForm.reset();
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+      }, 5000);
+      
+      console.log('QULTURE restock notification:', data);
+    });
+  </script>
+</body>
+</html>

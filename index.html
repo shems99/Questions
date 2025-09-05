@@ -190,7 +190,7 @@
         .store-sticker {
             text-decoration: none;
             color: #000;
-            background: #3df106e5;
+            background: #22c55e;
             border: 3px solid #000;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -219,6 +219,15 @@
         }
 
         .page-logo:hover {
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        .wordmark-logo {
+            height: 80px;
+            transition: transform 0.2s ease;
+        }
+
+        .wordmark-logo:hover {
             transform: scale(1.05) rotate(-2deg);
         }
 
@@ -277,6 +286,10 @@
             }
 
             .page-logo {
+                height: 60px;
+            }
+
+            .wordmark-logo {
                 height: 60px;
             }
 
@@ -345,6 +358,7 @@
     <div class="brand">ASK ME!</div>
     <div class="logo-container">
       <img src="Qulture-Logo_Full-Color.png" alt="QULTURE Logo" class="page-logo">
+      <img src="Qulture Logo_written.png" alt="QULTURE" class="wordmark-logo">
     </div>
     <div class="container">
         <div class="sticker sticker-1">WHATEVER!</div>

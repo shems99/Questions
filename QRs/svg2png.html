@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SVG → PNG (Local)</title>
+<style>
+  :root{--ink:#fff;--bg:#111;--pink:#ff0066;--green:#9dff57}
+  body{margin:0;background:#000;color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;display:flex;min-height:100vh}
+  .wrap{max-width:860px;margin:auto;padding:24px}
+  .card{background:#111;border:3px solid var(--pink);box-shadow:8px 8px 0 var(--pink);padding:18px}
+  h1{font-family: 'Bebas Neue', Arial, sans-serif;letter-spacing:2px;margin:0 0 12px}
+  .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  label{font-size:14px;opacity:.9}
+  input[type="number"],select{padding:8px 10px;background:#000;border:2px solid #fff;color:#fff;width:120px}
+  input[type="file"]{accent-color:var(--pink)}
+  button{cursor:pointer;border:0;padding:10px 14px;background:var(--pink);color:#fff;box-shadow:4px 4px 0 #000;transform:rotate(-1deg)}
+  button:disabled{filter:grayscale(1);cursor:not-allowed}
+  .preview{margin-top:14px;padding:10px;background:#000;border:2px dashed #444;max-height:300px;overflow:auto}
+  .note{font-size:12px;opacity:.7;margin-top:6px}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>SVG → PNG (Local)</h1>
+      <div class="row" style="margin-bottom:8px">
+        <input id="file" type="file" accept=".svg,image/svg+xml">
+        <label>Width (px): <input id="width" type="number" value="4000" min="100"></label>
+        <label>Background:
+          <select id="bg">
+            <option value="transparent">Transparent</option>
+            <option value="#ffffff">White</option>
+            <option value="#000000">Black</option>
+          </select>
+        </label>
+        <button id="export" disabled>Export PNG</button>
+      </div>
+      <div class="note">Tip: for print, 3000–5000 px width is typical. Bigger = crisper QR.</div>
+      <div id="preview" class="preview">No SVG loaded yet.</div>
+    </div>
+  </div>
+
+<script>
+const fileInput = document.getElementById('file');
+const exportBtn = document.getElementById('export');
+const widthInput = document.getElementById('width');
+const bgSelect = document.getElementById('bg');
+const preview = document.getElementById('preview');
+
+let svgBlobURL = null;
+let svgText = null;
+
+fileInput.addEventListener('change', async () => {
+  if (svgBlobURL) URL.revokeObjectURL(svgBlobURL);
+  const file = fileInput.files[0];
+  if (!file) return;
+  svgBlobURL = URL.createObjectURL(file);
+  svgText = await file.text();
+  preview.innerHTML = svgText;
+  exportBtn.disabled = false;
+});
+
+exportBtn.addEventListener('click', async () => {
+  if (!svgText) return;
+
+  // Make sure SVG has explicit width/height so raster size is predictable
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgText, 'image/svg+xml');
+  const svgEl = doc.documentElement;
+
+  let targetW = parseInt(widthInput.value || '2000', 10);
+  if (isNaN(targetW) || targetW < 1) targetW = 2000;
+
+  // Derive aspect ratio from viewBox or width/height
+  let vb = svgEl.getAttribute('viewBox');
+  let wAttr = svgEl.getAttribute('width');
+  let hAttr = svgEl.getAttribute('height');
+
+  let vbW, vbH;
+  if (vb) {
+    const parts = vb.split(/\s+/).map(Number);
+    vbW = parts[2]; vbH = parts[3];
+  } else if (wAttr && hAttr) {
+    vbW = parseFloat(wAttr); vbH = parseFloat(hAttr);
+  } else {
+    // fallback guess
+    vbW = 1000; vbH = 1000;
+  }
+
+  const aspect = vbH / vbW;
+  const targetH = Math.round(targetW * aspect);
+
+  // Serialize SVG to data URL
+  // Ensure no external refs for clean rasterization
+  svgEl.setAttribute('width', String(targetW));
+  svgEl.setAttribute('height', String(targetH));
+  if (!svgEl.getAttribute('viewBox') && wAttr && hAttr) {
+    svgEl.setAttribute('viewBox', `0 0 ${wAttr} ${hAttr}`);
+  }
+  const serializer = new XMLSerializer();
+  const cleanSVG = serializer.serializeToString(svgEl);
+  const encoded = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(cleanSVG);
+
+  // Draw to canvas
+  const img = new Image();
+  // Allow local file usage
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = targetW;
+    canvas.height = targetH;
+    const ctx = canvas.getContext('2d');
+    const bg = bgSelect.value;
+    if (bg !== 'transparent') {
+      ctx.fillStyle = bg;
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+    }
+    ctx.imageSmoothingEnabled = false; // keep QR edges crisp
+    ctx.drawImage(img, 0, 0, targetW, targetH);
+
+    canvas.toBlob((blob) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = (fileInput.files[0]?.name || 'image').replace(/\.svg$/i,'') + `.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }, 'image/png');
+  };
+  img.onerror = (e) => {
+    alert('Could not render SVG. Make sure it has no remote images/fonts.');
+    console.error(e);
+  };
+  img.src = encoded;
+});
+</script>
+</body>
+</html>
