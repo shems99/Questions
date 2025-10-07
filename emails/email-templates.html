@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QULTURE Email Templates</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .template { border: 1px solid #ddd; margin: 20px 0; padding: 20px; }
+        .template h3 { color: #333; border-bottom: 2px solid #ff0066; padding-bottom: 10px; }
+        .code { background: #f5f5f5; padding: 15px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; }
+        .note { background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 5px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>QULTURE Email Templates</h1>
+    
+    <div class="note">
+        <strong>Setup Instructions:</strong>
+        <ol>
+            <li>Go to <a href="https://emailjs.com" target="_blank">emailjs.com</a> and create a free account</li>
+            <li>Create a new service (Gmail, Outlook, etc.)</li>
+            <li>Create email templates using the templates below</li>
+            <li>Update the service ID, template ID, and public key in email-service.js</li>
+        </ol>
+    </div>
+
+    <div class="template">
+        <h3>Admin Order Notification Template</h3>
+        <p><strong>Template ID:</strong> order_notification</p>
+        <div class="code">Subject: New QULTURE Order - {{order_id}}
+
+New Order Received!
+
+Order ID: {{order_id}}
+Storefront: {{storefront}}
+Order Date: {{order_date}}
+
+CUSTOMER DETAILS:
+Name: {{customer_name}}
+Email: {{customer_email}}
+Phone: {{customer_phone}}
+
+SHIPPING ADDRESS:
+{{customer_address}}
+
+ORDER ITEMS:
+{{items}}
+
+Subtotal: {{subtotal}}
+Notes: {{notes}}
+
+---
+QULTURE Order Management
+Contact: {{to_email}}</div>
+    </div>
+
+    <div class="template">
+        <h3>Customer Confirmation Template</h3>
+        <p><strong>Template ID:</strong> customer_confirmation</p>
+        <div class="code">Subject: Your QULTURE Order Confirmation - {{order_id}}
+
+Hi {{to_name}},
+
+Thank you for your QULTURE order! We're excited to get your hoodie to you.
+
+ORDER DETAILS:
+Order ID: {{order_id}}
+
+ITEMS:
+{{items}}
+
+Total: {{subtotal}}
+Estimated Shipping: {{estimated_shipping}}
+
+We'll send you a shipping confirmation once your order is on its way.
+
+Questions? Contact us:
+Email: {{contact_email}}
+Phone: {{contact_phone}}
+
+Thanks for supporting QULTURE!
+- The QULTURE Team
+
+---
+Wear the icebreaker. Connect through conversation.</div>
+    </div>
+
+    <div class="template">
+        <h3>Alternative: Simple HTML Templates</h3>
+        <p>If you prefer HTML emails, here are styled versions:</p>
+        
+        <h4>Admin Notification (HTML)</h4>
+        <div class="code">&lt;html&gt;
+&lt;body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;"&gt;
+    &lt;div style="background: #000; color: #fff; padding: 20px; text-align: center;"&gt;
+        &lt;h1 style="color: #ff0066; margin: 0;"&gt;QULTURE&lt;/h1&gt;
+        &lt;h2 style="margin: 10px 0;"&gt;New Order: {{order_id}}&lt;/h2&gt;
+    &lt;/div&gt;
+    
+    &lt;div style="padding: 20px; background: #f9f9f9;"&gt;
+        &lt;h3&gt;Customer Details&lt;/h3&gt;
+        &lt;p&gt;&lt;strong&gt;Name:&lt;/strong&gt; {{customer_name}}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Email:&lt;/strong&gt; {{customer_email}}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Phone:&lt;/strong&gt; {{customer_phone}}&lt;/p&gt;
+        
+        &lt;h3&gt;Shipping Address&lt;/h3&gt;
+        &lt;pre style="background: #fff; padding: 10px; border-radius: 5px;"&gt;{{customer_address}}&lt;/pre&gt;
+        
+        &lt;h3&gt;Order Items&lt;/h3&gt;
+        &lt;pre style="background: #fff; padding: 10px; border-radius: 5px;"&gt;{{items}}&lt;/pre&gt;
+        
+        &lt;p&gt;&lt;strong&gt;Subtotal:&lt;/strong&gt; {{subtotal}}&lt;/p&gt;
+        &lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt; {{notes}}&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+
+        <h4>Customer Confirmation (HTML)</h4>
+        <div class="code">&lt;html&gt;
+&lt;body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;"&gt;
+    &lt;div style="background: #e8e2d8; color: #0f172a; padding: 20px; text-align: center;"&gt;
+        &lt;h1 style="color: #f97316; margin: 0;"&gt;QULTURE&lt;/h1&gt;
+        &lt;h2 style="margin: 10px 0;"&gt;Order Confirmation&lt;/h2&gt;
+    &lt;/div&gt;
+    
+    &lt;div style="padding: 20px;"&gt;
+        &lt;p&gt;Hi {{to_name}},&lt;/p&gt;
+        &lt;p&gt;Thank you for your QULTURE order! We're excited to get your hoodie to you.&lt;/p&gt;
+        
+        &lt;div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;"&gt;
+            &lt;h3&gt;Order Details&lt;/h3&gt;
+            &lt;p&gt;&lt;strong&gt;Order ID:&lt;/strong&gt; {{order_id}}&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Items:&lt;/strong&gt;&lt;/p&gt;
+            &lt;pre style="margin: 10px 0;"&gt;{{items}}&lt;/pre&gt;
+            &lt;p&gt;&lt;strong&gt;Total:&lt;/strong&gt; {{subtotal}}&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Estimated Shipping:&lt;/strong&gt; {{estimated_shipping}}&lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;p&gt;We'll send you a shipping confirmation once your order is on its way.&lt;/p&gt;
+        
+        &lt;p&gt;Questions? Contact us:&lt;/p&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Email: {{contact_email}}&lt;/li&gt;
+            &lt;li&gt;Phone: {{contact_phone}}&lt;/li&gt;
+        &lt;/ul&gt;
+        
+        &lt;p&gt;Thanks for supporting QULTURE!&lt;/p&gt;
+        &lt;p&gt;- The QULTURE Team&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+    </div>
+</body>
+</html>

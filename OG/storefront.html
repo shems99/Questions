@@ -4,7 +4,11 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>QULTURE — Store</title>
+  <link rel="icon" type="image/png" href="Qulture-Logo_Full-Color.png">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Staatliches&display=swap" rel="stylesheet">
+  <!-- EmailJS for order notifications -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="../emails/email-service.js"></script>
   <style>
     :root{
       --bg:#000000;
@@ -44,6 +48,14 @@
     nav{display:flex;align-items:center;gap:18px}
     nav a{color:var(--ink);text-decoration:none;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;transition:color 0.2s ease}
     nav a:hover{color:var(--pink)}
+
+    /* Mobile Navigation */
+    .mobile-menu-btn{display:none;background:none;border:none;color:var(--ink);font-size:24px;cursor:pointer;padding:8px}
+    .mobile-nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:1000;flex-direction:column;justify-content:center;align-items:center;gap:30px}
+    .mobile-nav.show{display:flex}
+    .mobile-nav a{font-size:24px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;text-decoration:none;color:var(--ink);transition:color 0.2s ease}
+    .mobile-nav a:hover{color:var(--pink)}
+    .mobile-nav-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--ink);font-size:32px;cursor:pointer}
     .cta{background:var(--pink);color:#fff;border:none;padding:10px 16px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;cursor:pointer;box-shadow:4px 4px 0 #000;transform:rotate(-1.5deg)}
     .cta:hover{transform:rotate(.5deg) scale(1.03)}
 
@@ -107,6 +119,35 @@
     .line{display:flex;justify-content:space-between;margin:6px 0}
     .mini{opacity:.8;font-size:13px}
     .checkout{border-top:2px solid var(--pink);padding:12px 16px}
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .wrap{padding:12px 16px}
+      .wordmark{font-size:32px;letter-spacing:4px}
+      .logo-img{height:40px}
+      .wordmark-logo{height:40px}
+      nav{display:none}
+      .mobile-menu-btn{display:block}
+      .hero{padding:20px 16px}
+      .hero-logo{height:80px}
+      .h-title{font-size:32px}
+      .h-sub{font-size:16px}
+      .card{padding:14px;margin-top:16px}
+      .p-name{font-size:28px}
+      .price{font-size:24px}
+      .swatch{width:24px;height:24px}
+      .size{padding:8px 12px;min-height:40px;font-size:14px}
+      .btn{padding:12px 20px;font-size:16px;min-height:48px}
+      
+      /* Mobile Cart - Full Screen */
+      .drawer{width:100vw;right:-100vw;border-left:none;border-top:3px solid var(--pink)}
+      .drawer.open{right:0}
+      .drawer header{padding:16px 20px}
+      .drawer h4{font-size:24px}
+      .drawer .content{padding:16px 20px}
+      .checkout{padding:16px 20px}
+      .field input,.field select,.field textarea{padding:12px;font-size:16px}
+    }
     .field{display:flex;flex-direction:column;gap:6px;margin:8px 0}
     .field input,.field select,.field textarea{
       background:#000;border:2px solid #fff;color:#fff;padding:10px;font-family:'Staatliches',sans-serif
@@ -197,8 +238,22 @@
         <a href="#contact">Contact</a>
         <button class="cta" id="openCartBtn">Cart</button>
       </nav>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
     </div>
   </header>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="mobileNavClose">×</button>
+    <a href="#product" onclick="closeMobileNav()">Product</a>
+    <a href="#details" onclick="closeMobileNav()">Details</a>
+    <a href="#gallery" onclick="closeMobileNav()">Gallery</a>
+    <a href="#mission" onclick="closeMobileNav()">Mission</a>
+    <a href="#jokes" onclick="closeMobileNav()">Jokes</a>
+    <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+    <a href="#contact" onclick="closeMobileNav()">Contact</a>
+    <button class="cta" id="mobileCartBtn" onclick="openCart(); closeMobileNav();">Cart</button>
+  </div>
 
   <section class="hero">
     <img src="Qulture-Logo_Full-Color.png" alt="QULTURE Logo" class="hero-logo">
@@ -327,8 +382,8 @@
     
     <!-- Modern QULTURE Collection Link -->
     <div style="text-align:center;padding:20px;border-top:2px solid var(--pink);background:#0a0a0a;">
-      <a href="Green_Orange/storefront.html" style="display:inline-block;transition:transform 0.2s ease;">
-        <img src="Green_Orange/Green and Orange.png" alt="Modern QULTURE" style="height:40px;filter:drop-shadow(2px 2px 4px rgba(0,0,0,0.3));">
+      <a href="../Green_Orange/storefront.html" style="display:inline-block;transition:transform 0.2s ease;">
+        <img src="../Green_Orange/Green and Orange.png" alt="Modern QULTURE" style="height:40px;filter:drop-shadow(2px 2px 4px rgba(0,0,0,0.3));">
       </a>
     </div>
   </footer>
@@ -442,6 +497,18 @@
     document.getElementById('openCartBtn').addEventListener('click', openCart);
     document.getElementById('closeCartBtn').addEventListener('click', closeCart);
 
+    // Mobile navigation
+    function openMobileNav() {
+      document.getElementById('mobileNav').classList.add('show');
+    }
+    
+    function closeMobileNav() {
+      document.getElementById('mobileNav').classList.remove('show');
+    }
+    
+    document.getElementById('mobileMenuBtn').addEventListener('click', openMobileNav);
+    document.getElementById('mobileNavClose').addEventListener('click', closeMobileNav);
+
     // Add to cart
     addToCartBtn.addEventListener('click', ()=>{
       const qty = Math.max(1, parseInt(qtyInput.value||'1',10));
@@ -456,20 +523,68 @@
       openCart();
     });
 
-    // Checkout form (placeholder)
+    // Initialize email service (wait for EmailJS to load)
+    let emailService;
+    window.addEventListener('load', () => {
+      emailService = new EmailService();
+      console.log('EmailJS initialized:', typeof emailjs !== 'undefined' ? '✓' : '✗');
+    });
+
+    // Checkout form with email notifications
     const checkoutForm = document.getElementById('checkoutForm');
-    checkoutForm.addEventListener('submit', (e)=>{
+    checkoutForm.addEventListener('submit', async (e)=>{
       e.preventDefault();
       if(cart.length===0){ alert('Your cart is empty. Add a hoodie first.'); return; }
+      
       const data = Object.fromEntries(new FormData(checkoutForm).entries());
-      const order = { items:cart, customer:data, subtotal: subtotalEl.textContent, createdAt:new Date().toISOString() };
-      // Save locally so you can inspect it (and wire email later)
-      localStorage.setItem('qultureLastOrder', JSON.stringify(order));
-      console.log('QULTURE placeholder order:', order);
-      alert('Order captured locally! We’ll add payment + email next.');
-      // Reset cart
-      cart.length = 0; renderCart(); closeCart();
-      checkoutForm.reset();
+      const order = { 
+        items:cart, 
+        customer:data, 
+        subtotal: subtotalEl.textContent, 
+        createdAt:new Date().toISOString(),
+        storefront: 'Original'
+      };
+      
+      // Show loading state
+      const submitBtn = checkoutForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Processing...';
+      submitBtn.disabled = true;
+      
+      try {
+        // Send email notifications
+        if (!emailService) {
+          throw new Error('Email service not initialized yet');
+        }
+        const emailSent = await emailService.sendOrderNotification(order);
+        await emailService.sendCustomerConfirmation(order);
+        
+        // Save locally as backup
+        localStorage.setItem('qultureLastOrder', JSON.stringify(order));
+        console.log('QULTURE order:', order);
+        
+        if (emailSent) {
+          alert('Order received! Check your email for confirmation. We\'ll process your order soon.');
+        } else {
+          alert('Order received! (Email notification failed, but order is saved locally)');
+        }
+        
+        // Reset cart
+        cart.length = 0; renderCart(); closeCart();
+        checkoutForm.reset();
+        
+      } catch (error) {
+        console.error('Order processing error:', error);
+        alert('Order received! (There was an issue with notifications, but your order is saved)');
+        
+        // Still reset cart even if email fails
+        cart.length = 0; renderCart(); closeCart();
+        checkoutForm.reset();
+      } finally {
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
     });
 
     // Countdown to next Feb 9

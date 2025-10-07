@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QULTURE Admin Panel</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', system-ui, sans-serif; 
+            background: #f8fafc; 
+            color: #1e293b; 
+            line-height: 1.6; 
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { 
+            background: linear-gradient(135deg, #ff0066, #9dff57); 
+            color: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            margin-bottom: 30px; 
+            text-align: center; 
+        }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .stats { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+            margin-bottom: 30px; 
+        }
+        .stat-card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            text-align: center; 
+        }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #ff0066; }
+        .stat-label { color: #64748b; margin-top: 5px; }
+        .orders-section { 
+            background: white; 
+            border-radius: 12px; 
+            padding: 30px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        }
+        .order-card { 
+            border: 1px solid #e2e8f0; 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            transition: all 0.2s ease; 
+        }
+        .order-card:hover { 
+            border-color: #ff0066; 
+            box-shadow: 0 4px 12px rgba(255,0,102,0.1); 
+        }
+        .order-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+        }
+        .order-id { 
+            font-weight: bold; 
+            color: #ff0066; 
+            font-size: 1.1rem; 
+        }
+        .order-status { 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            font-weight: 500; 
+        }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-fulfilled { background: #d1fae5; color: #065f46; }
+        .order-details { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            margin-bottom: 15px; 
+        }
+        .detail-group h4 { 
+            color: #374151; 
+            margin-bottom: 8px; 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        .detail-group p { margin-bottom: 4px; }
+        .items-list { 
+            background: #f8fafc; 
+            padding: 15px; 
+            border-radius: 6px; 
+            margin: 10px 0; 
+        }
+        .action-buttons { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 15px; 
+        }
+        .btn { 
+            padding: 8px 16px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 500; 
+            transition: all 0.2s ease; 
+        }
+        .btn-primary { 
+            background: #ff0066; 
+            color: white; 
+        }
+        .btn-primary:hover { background: #e6005c; }
+        .btn-secondary { 
+            background: #e2e8f0; 
+            color: #475569; 
+        }
+        .btn-secondary:hover { background: #cbd5e1; }
+        .btn-success { 
+            background: #10b981; 
+            color: white; 
+        }
+        .btn-success:hover { background: #059669; }
+        .no-orders { 
+            text-align: center; 
+            padding: 40px; 
+            color: #64748b; 
+        }
+        .refresh-btn { 
+            background: #3b82f6; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 500; 
+            margin-bottom: 20px; 
+        }
+        .refresh-btn:hover { background: #2563eb; }
+        @media (max-width: 768px) {
+            .order-details { grid-template-columns: 1fr; }
+            .order-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .action-buttons { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>QULTURE Admin Panel</h1>
+            <p>Manage your orders and track fulfillment</p>
+        </div>
+
+        <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh Orders</button>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalOrders">0</div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingOrders">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="fulfilledOrders">0</div>
+                <div class="stat-label">Fulfilled</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRevenue">$0.00</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+        </div>
+
+        <div class="orders-section">
+            <h2 style="margin-bottom: 20px;">Recent Orders</h2>
+            <div id="ordersList">
+                <div class="no-orders">No orders found. Orders will appear here when customers place them.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load orders from localStorage
+        function loadOrders() {
+            const originalOrders = JSON.parse(localStorage.getItem('qultureLastOrder') || 'null');
+            const modernOrders = JSON.parse(localStorage.getItem('qultureModernOrder') || 'null');
+            const allOrders = JSON.parse(localStorage.getItem('qultureOrders') || '[]');
+            
+            // Combine all orders
+            let orders = [...allOrders];
+            if (originalOrders) orders.push({...originalOrders, status: 'pending'});
+            if (modernOrders) orders.push({...modernOrders, status: 'pending'});
+            
+            // Sort by date (newest first)
+            orders.sort((a, b) => new Date(b.createdAt || b.timestamp) - new Date(a.createdAt || a.timestamp));
+            
+            updateStats(orders);
+            renderOrders(orders);
+        }
+
+        function updateStats(orders) {
+            const total = orders.length;
+            const pending = orders.filter(o => o.status === 'pending').length;
+            const fulfilled = orders.filter(o => o.status === 'fulfilled').length;
+            const revenue = orders.reduce((sum, order) => {
+                const subtotal = order.subtotal ? parseFloat(order.subtotal.replace('$', '')) : 0;
+                return sum + subtotal;
+            }, 0);
+
+            document.getElementById('totalOrders').textContent = total;
+            document.getElementById('pendingOrders').textContent = pending;
+            document.getElementById('fulfilledOrders').textContent = fulfilled;
+            document.getElementById('totalRevenue').textContent = `$${revenue.toFixed(2)}`;
+        }
+
+        function renderOrders(orders) {
+            const ordersList = document.getElementById('ordersList');
+            
+            if (orders.length === 0) {
+                ordersList.innerHTML = '<div class="no-orders">No orders found. Orders will appear here when customers place them.</div>';
+                return;
+            }
+
+            ordersList.innerHTML = orders.map(order => {
+                const orderId = order.order_id || 'QULT-' + Date.now();
+                const status = order.status || 'pending';
+                const customer = order.customer || {};
+                const items = order.items || [];
+                const subtotal = order.subtotal || '$0.00';
+                const createdAt = order.createdAt || order.timestamp || new Date().toISOString();
+                const storefront = order.storefront || 'Unknown';
+
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-id">${orderId}</div>
+                            <div class="order-status status-${status}">${status.toUpperCase()}</div>
+                        </div>
+                        
+                        <div class="order-details">
+                            <div class="detail-group">
+                                <h4>Customer Info</h4>
+                                <p><strong>Name:</strong> ${customer.name || 'N/A'}</p>
+                                <p><strong>Email:</strong> ${customer.email || 'N/A'}</p>
+                                <p><strong>Phone:</strong> ${customer.phone || 'N/A'}</p>
+                                <p><strong>Storefront:</strong> ${storefront}</p>
+                            </div>
+                            
+                            <div class="detail-group">
+                                <h4>Shipping Address</h4>
+                                <p>${customer.address1 || 'N/A'}</p>
+                                <p>${customer.address2 || ''}</p>
+                                <p>${customer.city || 'N/A'}, ${customer.state || 'N/A'} ${customer.zip || 'N/A'}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="items-list">
+                            <h4>Order Items</h4>
+                            ${items.map(item => `
+                                <p>${item.product} - Size: ${item.size} - Qty: ${item.qty} - $${item.price.toFixed(2)} each</p>
+                            `).join('')}
+                            <p style="margin-top: 10px; font-weight: bold;">Total: ${subtotal}</p>
+                        </div>
+                        
+                        ${customer.notes ? `<p><strong>Notes:</strong> ${customer.notes}</p>` : ''}
+                        
+                        <p style="color: #64748b; font-size: 0.9rem; margin-top: 10px;">
+                            Order Date: ${new Date(createdAt).toLocaleString()}
+                        </p>
+                        
+                        <div class="action-buttons">
+                            ${status === 'pending' ? `
+                                <button class="btn btn-success" onclick="markFulfilled('${orderId}')">
+                                    ✅ Mark as Fulfilled
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-secondary" onclick="copyOrderDetails('${orderId}')">
+                                📋 Copy Details
+                            </button>
+                            <button class="btn btn-primary" onclick="emailCustomer('${customer.email}', '${orderId}')">
+                                📧 Email Customer
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function markFulfilled(orderId) {
+            // Update order status in localStorage
+            const orders = JSON.parse(localStorage.getItem('qultureOrders') || '[]');
+            const order = orders.find(o => o.order_id === orderId);
+            if (order) {
+                order.status = 'fulfilled';
+                order.fulfilled_at = new Date().toISOString();
+                localStorage.setItem('qultureOrders', JSON.stringify(orders));
+            }
+            
+            // Reload orders
+            loadOrders();
+        }
+
+        function copyOrderDetails(orderId) {
+            const orders = JSON.parse(localStorage.getItem('qultureOrders') || '[]');
+            const order = orders.find(o => o.order_id === orderId);
+            if (order) {
+                const details = `
+Order ID: ${order.order_id}
+Customer: ${order.customer.name}
+Email: ${order.customer.email}
+Phone: ${order.customer.phone}
+Address: ${order.customer.address1}, ${order.customer.city}, ${order.customer.state} ${order.customer.zip}
+Items: ${order.items.map(i => `${i.product} - ${i.size} x${i.qty}`).join(', ')}
+Total: ${order.subtotal}
+Notes: ${order.customer.notes || 'None'}
+                `.trim();
+                
+                navigator.clipboard.writeText(details).then(() => {
+                    alert('Order details copied to clipboard!');
+                });
+            }
+        }
+
+        function emailCustomer(email, orderId) {
+            if (email) {
+                window.open(`mailto:${email}?subject=Your QULTURE Order ${orderId}&body=Hi! Thanks for your QULTURE order. We're processing it now and will send you a shipping confirmation soon.`);
+            } else {
+                alert('No email address available for this customer.');
+            }
+        }
+
+        // Load orders on page load
+        loadOrders();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadOrders, 30000);
+    </script>
+</body>
+</html>
