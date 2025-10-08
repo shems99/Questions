@@ -134,19 +134,16 @@
       .size{padding:8px 12px;min-height:40px;font-size:14px}
       .btn{padding:12px 20px;font-size:16px;min-height:48px}
       
-      /* Mobile Cart - Fixed Height with Proper Scrolling */
-      .drawer{width:100vw;right:-100vw;border-left:none;border-top:3px solid var(--orange);height:100vh;overflow:hidden}
+      /* Mobile Cart - Simple Scrollable Layout */
+      .drawer{width:100vw;right:-100vw;border-left:none;border-top:3px solid var(--orange);height:100vh;overflow-y:scroll;-webkit-overflow-scrolling:touch}
       .drawer.open{right:0}
-      .drawer header{padding:16px 20px;flex-shrink:0;background:var(--card)}
+      .drawer header{padding:12px 20px;background:var(--card);position:sticky;top:0;z-index:10}
       .drawer h4{font-size:24px}
-      .drawer .content{padding:16px 20px;overflow-y:auto;flex:1;height:calc(100vh - 120px)}
-      .checkout{padding:16px 20px;flex-shrink:0;background:var(--card);border-top:2px solid var(--orange)}
+      .drawer .content{padding:12px 20px}
+      .checkout{padding:12px 20px;background:var(--card);border-top:2px solid var(--orange)}
       .field input,.field select,.field textarea{padding:10px;font-size:16px;margin-bottom:4px}
       .field{margin:4px 0}
       .field label{font-size:13px;margin-bottom:2px;display:block}
-      .checkout{padding:12px 20px}
-      .drawer .content{padding:12px 20px}
-      .drawer header{padding:12px 20px}
     }
     .field input,.field select,.field textarea{
       background:var(--card);border:2px solid var(--light-gray);color:var(--ink);padding:8px;font-family:'Inter',sans-serif;border-radius:4px;font-size:14px
