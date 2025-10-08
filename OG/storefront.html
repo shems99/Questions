@@ -139,14 +139,16 @@
       .size{padding:8px 12px;min-height:40px;font-size:14px}
       .btn{padding:12px 20px;font-size:16px;min-height:48px}
       
-      /* Mobile Cart - Full Screen */
+      /* Mobile Cart - Full Screen with Better Scrolling */
       .drawer{width:100vw;right:-100vw;border-left:none;border-top:3px solid var(--pink)}
       .drawer.open{right:0}
-      .drawer header{padding:16px 20px}
+      .drawer header{padding:16px 20px;position:sticky;top:0;background:#0b0b0b;z-index:10}
       .drawer h4{font-size:24px}
-      .drawer .content{padding:16px 20px}
-      .checkout{padding:16px 20px}
-      .field input,.field select,.field textarea{padding:12px;font-size:16px}
+      .drawer .content{padding:16px 20px;max-height:calc(100vh - 140px);overflow-y:auto}
+      .checkout{padding:16px 20px;position:sticky;bottom:0;background:#0b0b0b;border-top:2px solid var(--pink)}
+      .field input,.field select,.field textarea{padding:12px;font-size:16px;margin-bottom:8px}
+      .field{margin:12px 0}
+      .field label{font-size:14px;margin-bottom:4px;display:block}
     }
     .field{display:flex;flex-direction:column;gap:6px;margin:8px 0}
     .field input,.field select,.field textarea{
