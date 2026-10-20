@@ -433,13 +433,16 @@
           <label>Notes</label>
           <textarea name="notes" rows="3" placeholder="Anything we should know?"></textarea>
         </div>
-        <button class="btn primary" type="submit" style="width:100%">Place placeholder order</button>
-        <p class="mini" style="margin-top:6px">This saves your order locally (no payment yet). We'll wire email/payment later.</p>
+        <button class="btn primary" type="submit" style="width:100%">Place order</button>
+        <p class="mini" style="margin-top:6px">No card needed here. After you order, we'll send you a Venmo request at @shems99 to confirm.</p>
       </form>
     </div>
   </aside>
 
   <script>
+    // Payment configuration (edit this to update payment info across the page)
+    const PAYMENT_VENMO = '@shems99';
+
     // Year
     document.getElementById('y').textContent = new Date().getFullYear();
 
@@ -566,9 +569,9 @@
         console.log('QULTURE order:', order);
         
         if (emailSent) {
-          alert('Order received! Check your email for confirmation. We\'ll process your order soon.');
+          alert(`Order received! We'll send you a Venmo request at ${PAYMENT_VENMO} shortly. Check your email for confirmation.`);
         } else {
-          alert('Order received! (Email notification failed, but order is saved locally)');
+          alert(`Order received! We'll send you a Venmo request at ${PAYMENT_VENMO} shortly. (Email notification failed, but order is saved locally)`);
         }
         
         // Reset cart
@@ -577,7 +580,7 @@
         
       } catch (error) {
         console.error('Order processing error:', error);
-        alert('Order received! (There was an issue with notifications, but your order is saved)');
+        alert(`Order received! We'll send you a Venmo request at ${PAYMENT_VENMO} shortly. (There was an issue with notifications, but your order is saved)`);
         
         // Still reset cart even if email fails
         cart.length = 0; renderCart(); closeCart();
